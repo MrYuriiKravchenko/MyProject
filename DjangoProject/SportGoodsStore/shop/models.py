@@ -1,8 +1,10 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Product(models.Model):
-    category = models.ForeignKey('Category', related_name='products', on_delete=models.CASCADE, verbose_name='категория')
+    category = models.ForeignKey('Category', related_name='products', on_delete=models.CASCADE,
+                                 verbose_name='категория')
     name = models.CharField(max_length=200, verbose_name='название')
     slug = models.SlugField(max_length=200)
     image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True, verbose_name='изображение')
@@ -25,6 +27,10 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('shop:product_detail',
+                       args=[self.id, self.slug])
+
 
 class Category(models.Model):
     name = models.CharField(max_length=200, verbose_name='категория')
@@ -40,3 +46,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('shop:product_list_by_category', args=[self.slug])
