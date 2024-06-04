@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    {% block head %}
+    {% endblock %}
 </head>
 <body>
     <!-- Навигация -->
@@ -23,12 +25,16 @@
                     <li><a href="#">О нас</a></li>
                     <li><a href="#">Профиль</a></li>
                     <li>
-                        <a href="#">Корзина</a>
-                        <span class="cart-indicator">0</span>
+                        <a href="{% url 'cart:cart_detail' %}">Корзина</a>
+                        {% with total_items=cart|length %}
+                            {% if total_items > 0 %}
+                                <span class="cart-indicator">{{ total_items }}</span>
+                            {% endif %}
+                        {% endwith %}
                     </li>
                     <li><a href="#">Войти</a></li>
                 </ul>
-                <form action="#" method="get" class="search-form">
+                <form action="{% url 'shop:search_results' %}" method="get" class="search-form">
                     <input type="text" name="q" placeholder="Поиск...">
                     <button type="submit">Поиск</button>
                 </form>
@@ -39,10 +45,8 @@
     <!-- Основное содержимое -->
     <main>
         <div class="container">
-            <!-- Главный контент -->
             <section class="content">
                 {% block content %}
-                <!-- Контент будет вставлен здесь -->
                 {% endblock %}
             </section>
         </div>

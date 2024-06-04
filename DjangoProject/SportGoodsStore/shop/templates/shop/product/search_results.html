@@ -1,0 +1,26 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}Поиск{% endblock title %}
+
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/search_results.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="search-results-container">
+        <h1>Результаты поиска</h1>
+        {% for product in product_list %}
+            <div class="search-results-item">
+                <h3><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% endif %}
+                <p>{{ product.description }}</p>
+                <p class="price">Цена: {{ product.price }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

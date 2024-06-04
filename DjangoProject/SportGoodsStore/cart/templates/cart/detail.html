@@ -1,0 +1,66 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+    Ваша корзина покупок
+{% endblock %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Ваша корзина покупок</h1>
+    <table class="cart">
+        <thead>
+            <tr>
+                <th>Изображение</th>
+                <th>Продукт</th>
+                <th>Количество</th>
+                <th>Удалить</th>
+                <th>Цена за единицу товара</th>
+                <th>Цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+                {% with product=item.product %}
+                    <tr>
+                        <td>
+                            <a href="{{ product.get_absolute_url }}">
+                                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" style="max-width: 100px; height: auto; border-radius: 8px;">
+                            </a>
+                        </td>
+                        <td>{{ product.name }}</td>
+                        <td>
+                            <form action="{% url 'cart:cart_add' product.id %}" method="post" style="display: inline-block; margin: 0;">
+                                {{ item.update_quantity_form.quantity }}
+                                {{ item.update_quantity_form.override }}
+                                <input type="submit" value="Изменить" style="border: none; color: white; padding: 5px 10px; cursor: pointer; border-radius: 4px; background-color: #ffc107; transition: background-color 0.3s ease, transform 0.3s ease;">
+                                {% csrf_token %}
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{% url 'cart:cart_remove' product.id %}" method="post" style="display: inline-block; margin: 0;">
+                                <input type="submit" value="Удалить" style="border: none; color: white; padding: 5px 10px; cursor: pointer; border-radius: 4px; background-color: #dc3545; transition: background-color 0.3s ease, transform 0.3s ease;">
+                                {% csrf_token %}
+                            </form>
+                        </td>
+                        <td class="num">₽ {{ item.price }}</td>
+                        <td class="num">₽ {{ item.total_price }}</td>
+                    </tr>
+                {% endwith %}
+            {% endfor %}
+            <tr class="total">
+                <td>Общее</td>
+                <td colspan="4"></td>
+                <td class="num">${{ cart.get_total_price }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="text-right" style="margin-top: 20px; text-align: right;">
+        <a href="{% url 'shop:product_list' %}" class="button light" style="padding: 10px 20px; font-size: 16px; text-decoration: none; color: white; border-radius: 4px; cursor: pointer; background-color: #007bff; transition: background-color 0.3s ease, transform 0.3s ease; white-space: nowrap;">Продолжить покупки</a>
+        <a href="#" class="button" style="padding: 10px 20px; font-size: 16px; text-decoration: none; color: white; border-radius: 4px; cursor: pointer; background-color: #28a745; transition: background-color 0.3s ease, transform 0.3s ease; white-space: nowrap;">Перейти к оформлению</a>
+    </p>
+{% endblock %}

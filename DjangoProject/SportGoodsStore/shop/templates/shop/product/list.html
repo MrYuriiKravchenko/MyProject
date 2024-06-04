@@ -21,6 +21,7 @@
             </ul>
         </div>
         <div id="main" class="product-list">
+            <img src="{% static 'img/banner.jpg' %}" alt="Banner" class="banner">
             <h1>{% if category %}{{ category.name }}{% else %}Товары{% endif %}</h1>
             {% for product in products %}
                 <div class="item">
@@ -29,7 +30,7 @@
                     </a>
                     <div class="item-details">
                         <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-                        <span class="price">${{ product.price }}</span>
+                        <span class="price">₽ {{ product.price }}</span>
                         <button class="add-to-cart">В корзину</button>
                     </div>
                 </div>

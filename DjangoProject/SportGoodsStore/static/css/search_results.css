@@ -1,0 +1,98 @@
+.search-results-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+}
+
+.search-results-container h1 {
+    font-size: 28px !important;
+    margin-bottom: 20px !important;
+    text-align: center !important;
+}
+
+.search-results-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    margin-bottom: 20px !important;
+    padding: 15px !important;
+    background-color: #f9f9f9 !important;
+    border: 1px solid #ddd !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    transition: transform 0.3s ease !important, box-shadow 0.3s ease !important;
+}
+
+.search-results-item:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.search-results-item img {
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 8px !important;
+    margin-bottom: 10px !important;
+}
+
+.search-results-item h3 {
+    font-size: 20px !important;
+    margin: 10px 0 !important;
+}
+
+.search-results-item p {
+    font-size: 16px !important;
+    margin: 5px 0 !important;
+}
+
+.search-results-item .price {
+    font-size: 18px !important;
+    font-weight: bold !important;
+    color: #333 !important;
+    margin: 10px 0 !important;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .search-results-container {
+        grid-template-columns: 1fr !important;
+    }
+
+    .search-results-item {
+        padding: 10px !important;
+    }
+
+    .search-results-item h3 {
+        font-size: 18px !important;
+    }
+
+    .search-results-item p {
+        font-size: 14px !important;
+    }
+
+    .search-results-item .price {
+        font-size: 16px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-results-container {
+        grid-template-columns: 1fr !important;
+    }
+
+    .search-results-item {
+        padding: 8px !important;
+    }
+
+    .search-results-item h3 {
+        font-size: 16px !important;
+    }
+
+    .search-results-item p {
+        font-size: 12px !important;
+    }
+
+    .search-results-item .price {
+        font-size: 14px !important;
+    }
+}

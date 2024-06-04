@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Example function to add an item to the cart
     function addToCart() {
         let itemCount = parseInt(cartIndicator.textContent) || 0;
-        itemCount++;
+//        itemCount++;
         cartIndicator.textContent = itemCount;
         cartIndicator.style.display = 'inline';
     }

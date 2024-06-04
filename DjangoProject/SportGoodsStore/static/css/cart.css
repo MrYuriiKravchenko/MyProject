@@ -1,0 +1,213 @@
+.cart {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.cart thead {
+    background-color: #333;
+    color: #fff;
+}
+
+.cart th,
+.cart td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.cart th {
+    font-weight: bold;
+}
+
+.cart td img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 8px;
+}
+
+.cart .num {
+    font-weight: bold;
+    color: #333;
+}
+
+.cart .total {
+    font-weight: bold;
+    background-color: #f9f9f9;
+}
+
+.cart .total td {
+    border: none;
+}
+
+.cart .total .num {
+    font-size: 20px;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+}
+
+.button.light {
+    background-color: #007bff;
+}
+
+.button.light:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.button.primary {
+    background-color: #28a745;
+}
+
+.button.primary:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.text-right {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.button-small {
+    padding: 5px 10px;
+    font-size: 14px;
+    text-decoration: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+}
+
+.button-small.delete {
+    background-color: #dc3545;
+}
+
+.button-small.delete:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+.button-small.update {
+    background-color: #ffc107;
+}
+
+.button-small.update:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
+}
+
+.cart form {
+    display: inline-block;
+    margin: 0;
+}
+
+.cart form input[type="submit"] {
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cart form input[type="submit"].delete {
+    background-color: #dc3545;
+}
+
+.cart form input[type="submit"].delete:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+.cart form input[type="submit"].update {
+    background-color: #ffc107;
+}
+
+.cart form input[type="submit"].update:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
+}
+
+/* Адаптивные стили для страницы корзины */
+
+@media (max-width: 768px) {
+    .cart td img {
+        max-width: 75px;
+    }
+
+    .text-right {
+        text-align: center;
+    }
+
+    .button {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .cart thead {
+        display: none;
+    }
+
+    .cart tr {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+
+    .cart td {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .cart td:last-child {
+        border-bottom: none;
+    }
+
+    .cart .total {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .cart .total td {
+        border: none;
+    }
+
+    .cart .total .num {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cart td img {
+        max-width: 50px;
+    }
+
+    .cart tr {
+        margin-bottom: 5px;
+    }
+
+    .cart td {
+        padding: 5px 0;
+    }
+
+    .cart .total .num {
+        font-size: 16px;
+    }
+}
