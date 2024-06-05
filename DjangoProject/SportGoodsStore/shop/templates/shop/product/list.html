@@ -19,10 +19,20 @@
                     </li>
                 {% endfor %}
             </ul>
+
+            <!-- Форма для фильтрации -->
+            <div class="filter-form">
+                <form method="get">
+                    {{ filter_form.sort_by.label_tag }}
+                    {{ filter_form.sort_by }}
+                    <button type="submit">Фильтр</button>
+                </form>
+            </div>
         </div>
         <div id="main" class="product-list">
             <img src="{% static 'img/banner.jpg' %}" alt="Banner" class="banner">
             <h1>{% if category %}{{ category.name }}{% else %}Товары{% endif %}</h1>
+
             {% for product in products %}
                 <div class="item">
                     <a href="{{ product.get_absolute_url }}">
@@ -35,6 +45,36 @@
                     </div>
                 </div>
             {% endfor %}
-        </div>
-    </div>
+        </div> <!-- Close product-list div -->
+    </div> <!-- Close content-wrapper div -->
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <nav class="list-pages">
+        <ul>
+            {% if page_obj.has_previous %}
+            <li class="page-num">
+                <a href="?{% if request.GET.sort_by %}sort_by={{ request.GET.sort_by }}&{% endif %}page={{ page_obj.previous_page_number }}">&lt;</a>
+            </li>
+            {% endif %}
+
+            {% for p in paginator.page_range %}
+                {% if page_obj.number == p %}
+                <li class="page-num page-num-selected">{{ p }}</li>
+                {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                <li class="page-num">
+                    <a href="?{% if request.GET.sort_by %}sort_by={{ request.GET.sort_by }}&{% endif %}page={{ p }}">{{ p }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-num">
+                <a href="?{% if request.GET.sort_by %}sort_by={{ request.GET.sort_by }}&{% endif %}page={{ page_obj.next_page_number }}">&gt;</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+    <!-- End Pagination -->
 {% endblock %}

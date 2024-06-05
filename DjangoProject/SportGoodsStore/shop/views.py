@@ -3,19 +3,31 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 from .models import Product, Category
 from cart.forms import CartAddProductForm
+from .forms import ProductFilterForm
+from django.core.paginator import Paginator
 
 
 class ProductListView(ListView):
     model = Product
     template_name = 'shop/product/list.html'
     context_object_name = 'products'
+    paginate_by = 8
 
     def get_queryset(self):
         category_slug = self.kwargs.get('category_slug')
+        sort_by = self.request.GET.get('sort_by')
+        queryset = Product.objects.filter(available=True)
+
         if category_slug:
             category = get_object_or_404(Category, slug=category_slug)
-            return Product.objects.filter(category=category, available=True)
-        return Product.objects.filter(available=True)
+            queryset = queryset.filter(category=category)
+
+        if sort_by == 'asc':
+            queryset = queryset.order_by('price')
+        elif sort_by == 'desc':
+            queryset = queryset.order_by('-price')
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -25,6 +37,9 @@ class ProductListView(ListView):
             context['category'] = get_object_or_404(Category, slug=category_slug)
         else:
             context['category'] = None
+
+        context['filter_form'] = ProductFilterForm(self.request.GET)
+
         return context
 
 
