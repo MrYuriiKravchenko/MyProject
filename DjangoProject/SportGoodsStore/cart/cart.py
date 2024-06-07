@@ -24,7 +24,6 @@ class Cart:
         self.save()
 
     def save(self):
-        """Обновить сессию, чтобы пометить ее как измененную."""
         self.session.modified = True
 
     def remove(self, product):
@@ -56,5 +55,6 @@ class Cart:
 
     def clear(self):
         """Удаляет корзину из сеанса"""
-        del self.session[settings.CART_SESSION_ID]
+        self.session.pop(settings.CART_SESSION_ID, None)
+        self.cart = {}  # Очистить атрибут корзины
         self.save()
