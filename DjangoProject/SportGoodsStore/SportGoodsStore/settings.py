@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'orders.apps.OrdersConfig',
     'crispy_forms',
     'crispy_bootstrap5',
+    'coupons.apps.CouponsConfig',
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,5 @@ CART_SESSION_ID = 'cart'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

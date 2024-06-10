@@ -53,6 +53,8 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
     white-space: nowrap;
+    text-align: center; /* Центрирование текста */
+    display: inline-block; /* Центрирование текста */
 }
 
 .button.light {
@@ -87,6 +89,8 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
     white-space: nowrap;
+    text-align: center; /* Центрирование текста */
+    display: inline-block; /* Центрирование текста */
 }
 
 .button-small.delete {
@@ -119,6 +123,8 @@
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    text-align: center; /* Центрирование текста */
+    display: inline-block; /* Центрирование текста */
 }
 
 .cart form input[type="submit"].delete {
@@ -140,7 +146,6 @@
 }
 
 /* Адаптивные стили для страницы корзины */
-
 @media (max-width: 768px) {
     .cart td img {
         max-width: 75px;

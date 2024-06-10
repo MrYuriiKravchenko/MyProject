@@ -30,11 +30,11 @@
         {% for item in cart %}
           <li>
             {{ item.quantity }}x {{ item.product.name }}
-            <span>${{ item.total_price }}</span>
+            <span>₽ {{ item.total_price }}</span>
           </li>
         {% endfor %}
       </ul>
-      <p>Итого: ${{ cart.get_total_price }}</p>
+      <p>Итого: ₽ {{ cart.get_total_price }}</p>
     </div>
   </div>
 {% endblock %}
