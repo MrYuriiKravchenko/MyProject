@@ -5,6 +5,8 @@ from django.views.generic import FormView, TemplateView
 from shop.models import Product
 from .cart import Cart
 from .forms import CartAddProductForm
+from coupons.forms import CouponApplyForm
+from shop.recommender import Recommender
 
 
 class CartAddView(FormView):
@@ -44,4 +46,17 @@ class CartDetailView(TemplateView):
                 'quantity': item['quantity'],
                 'override': True})
         context['cart'] = cart
+        context['coupon_apply_form'] = CouponApplyForm()
+
+        r = Recommender()
+        cart_products = [item['product'] for item in cart]
+        if cart_products:
+            recommended_products = r.suggest_products_for(
+                cart_products,
+                max_results=4
+            )
+        else:
+            recommended_products = []
+
+        context['recommended_products'] = recommended_products
         return context

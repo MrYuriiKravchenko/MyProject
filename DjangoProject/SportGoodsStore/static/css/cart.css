@@ -53,8 +53,8 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
     white-space: nowrap;
-    text-align: center; /* Центрирование текста */
-    display: inline-block; /* Центрирование текста */
+    text-align: center;
+    display: inline-block;
 }
 
 .button.light {
@@ -89,8 +89,8 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
     white-space: nowrap;
-    text-align: center; /* Центрирование текста */
-    display: inline-block; /* Центрирование текста */
+    text-align: center;
+    display: inline-block;
 }
 
 .button-small.delete {
@@ -123,8 +123,8 @@
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    text-align: center; /* Центрирование текста */
-    display: inline-block; /* Центрирование текста */
+    text-align: center;
+    display: inline-block;
 }
 
 .cart form input[type="submit"].delete {
@@ -145,7 +145,83 @@
     transform: scale(1.05);
 }
 
-/* Адаптивные стили для страницы корзины */
+/* Styles for the recommended products */
+.recommendations {
+    margin-top: 20px;
+}
+
+.recommendations h3 {
+    margin-bottom: 10px;
+}
+
+.recommended-products {
+    display: flex;
+    gap: 10px;
+}
+
+.recommended-products .item {
+    text-align: center;
+}
+
+.recommended-products .item img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 8px;
+}
+
+.recommended-products .item p {
+    margin: 5px 0 0;
+}
+
+/* Styles for the coupon section */
+.coupon-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Styles for the coupon form */
+.coupon-form-container {
+    display: flex;
+    flex-direction: column;  /* Stack title and form */
+    align-items: flex-start;
+}
+
+.coupon-title {
+    font-weight: bold;
+    margin-bottom: 10px;  /* Add some space below the title */
+}
+
+.coupon-form {
+    display: flex;
+    align-items: center;
+}
+
+.coupon-form input[type="text"] {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.coupon-form input[type="submit"] {
+    padding: 5px 10px;
+    font-size: 14px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.coupon-form input[type="submit"]:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Responsive styles for the cart page */
 @media (max-width: 768px) {
     .cart td img {
         max-width: 75px;
@@ -197,6 +273,19 @@
     .cart .total .num {
         font-size: 18px;
     }
+
+    .coupon-section {
+        flex-direction: column;
+    }
+
+    .coupon-form {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .coupon-form input[type="text"] {
+        margin-bottom: 10px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -214,5 +303,10 @@
 
     .cart .total .num {
         font-size: 16px;
+    }
+
+    .coupon-form-container {
+        margin-right: 0;
+        justify-content: center;  /* Center align for small screens */
     }
 }

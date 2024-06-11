@@ -53,20 +53,63 @@
                         </tr>
                     {% endwith %}
                 {% endfor %}
+                {% if cart.coupon %}
+                    <tr class="subtotal">
+                        <td>Итого</td>
+                        <td colspan="4"></td>
+                        <td class="num">₽ {{ cart.get_total_price|floatformat:2 }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            "{{ cart.coupon.code }}" купон
+                            ({{ cart.coupon.discount }}% скидка)
+                        </td>
+                        <td colspan="4"></td>
+                        <td class="num neg">
+                            - ₽ {{ cart.get_discount|floatformat:2 }}
+                        </td>
+                    </tr>
+                {% endif %}
                 <tr class="total">
                     <td>Общее</td>
                     <td colspan="4"></td>
-                    <td class="num">₽ {{ cart.get_total_price }}</td>
+                    <td class="num">₽ {{ cart.get_total_price_after_discount|floatformat:2 }}</td>
                 </tr>
             </tbody>
         </table>
+        <div class="coupon-section">
+            {% if recommended_products %}
+                <div class="recommendations">
+                    <h3>Люди, которые купили это, также купили</h3>
+                    <div class="recommended-products">
+                        {% for p in recommended_products %}
+                            <div class="item">
+                                <a href="{{ p.get_absolute_url }}">
+                                    <img src="{% if p.image %}{{ p.image.url }}{% else %}
+                                    {% static 'img/no_image.png' %}{% endif %}">
+                                </a>
+                                <p><a href="{{ p.get_absolute_url }}">{{ p.name }}</a></p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            <div class="coupon-form-container">
+                <div class="coupon-title">Примените купон:</div>
+                <form action="{% url 'coupons:apply' %}" method="post" class="coupon-form">
+                    {{ coupon_apply_form }}
+                    <input type="submit" value="Применить">
+                    {% csrf_token %}
+                </form>
+            </div>
+        </div>
     {% else %}
         <p><strong>В вашей корзине пусто.</strong><br>Загляните на главную, чтобы выбрать товары или найдите нужное в поиске.</p>
     {% endif %}
     <p class="text-right" style="margin-top: 20px; text-align: right;">
-        <a href="{% url 'shop:product_list' %}" class="button light" style="padding: 10px 20px; font-size: 16px; text-decoration: none; color: white; border-radius: 4px; cursor: pointer; background-color: #007bff; transition: background-color 0.3s ease, transform 0.3s ease; white-space: nowrap;">Продолжить покупки</a>
+        <a href="{% url 'shop:product_list' %}" class="button light">Продолжить покупки</a>
         {% if cart %}
-            <a href="{% url 'orders:order_create' %}" class="button primary" style="padding: 10px 20px; font-size: 16px; text-decoration: none; color: white; border-radius: 4px; cursor: pointer; background-color: #28a745; transition: background-color 0.3s ease, transform 0.3s ease; white-space: nowrap;">Перейти к оформлению</a>
+            <a href="{% url 'orders:order_create' %}" class="button primary">Перейти к оформлению</a>
         {% endif %}
     </p>
 {% endblock %}

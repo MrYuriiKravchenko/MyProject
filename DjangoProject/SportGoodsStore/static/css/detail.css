@@ -142,3 +142,54 @@
         padding: 3px;
     }
 }
+
+.recommendations {
+    margin-top: 20px;
+}
+
+.recommendations h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.recommendations .item {
+    display: inline-block;
+    width: 30%;
+    margin-right: 3.33%;
+    margin-bottom: 20px;
+    vertical-align: top;
+}
+
+.recommendations .item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.recommendations .item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+}
+
+.recommendations .item p {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.recommendations .item:nth-child(3n) {
+    margin-right: 0;
+}
+
+@media (max-width: 768px) {
+    .recommendations .item {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .recommendations .item img {
+        width: 100%;
+        height: auto;
+    }
+}
