@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 from .models import Product, Category
 from cart.forms import CartAddProductForm
 from .forms import ProductFilterForm
@@ -69,9 +69,14 @@ class SearchResultsListView(ListView):
     model = Product
     context_object_name = 'product_list'
     template_name = 'shop/product/search_results.html'
+    paginate_by = 8
 
     def get_queryset(self):
         query = self.request.GET.get('q')
         return Product.objects.filter(
             Q(name__icontains=query) | Q(price__icontains=query)
         )
+
+
+class AboutPageView(TemplateView):
+    template_name = 'about.html'

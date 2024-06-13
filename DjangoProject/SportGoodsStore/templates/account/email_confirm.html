@@ -1,0 +1,37 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% load i18n %}
+{% load account %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+{% endblock %}
+
+{% block head_title %}{% trans "Подтверждение адреса электронной почты" %}{% endblock %}
+
+{% block content %}
+<div class="confirm-email-container">
+    <h1>{% trans "Подтверждение адреса электронной почты" %}</h1>
+
+    {% if confirmation %}
+        {% user_display confirmation.email_address.user as user_display %}
+        <p>
+            {% blocktrans with confirmation.email_address.email as email %}
+                Пожалуйста, подтвердите, что <a href="mailto:{{ email }}">{{ email }}</a> является адресом электронной почты для пользователя {{ user_display }}.
+            {% endblocktrans %}
+        </p>
+        <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+            {% csrf_token %}
+            <button type="submit">{% trans 'Подтвердить' %}</button>
+        </form>
+    {% else %}
+        {% url 'account_email' as email_url %}
+        <p>
+            {% blocktrans %}
+                Ссылка для подтверждения электронной почты устарела или недействительна. Пожалуйста,
+                <a href="{{ email_url }}">запросите новое подтверждение по электронной почте</a>.
+            {% endblocktrans %}
+        </p>
+    {% endif %}
+</div>
+{% endblock %}
