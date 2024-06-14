@@ -1,8 +1,9 @@
+from django import forms
 from .models import User
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from allauth.account.forms import SignupForm
 
 
-class CustomUserCreationForm(UserCreationForm):
+class CustomUserCreationForm(SignupForm):
     class Meta:
         model = User
         fields = (
@@ -10,10 +11,12 @@ class CustomUserCreationForm(UserCreationForm):
             'username',
             'image',
             'phone_number',
+            'first_name',
+            'last_name',
         )
 
 
-class CustomUserChangeForm(UserChangeForm):
+class CustomUserChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
@@ -21,4 +24,6 @@ class CustomUserChangeForm(UserChangeForm):
             'username',
             'image',
             'phone_number',
+            'first_name',
+            'last_name',
         )
