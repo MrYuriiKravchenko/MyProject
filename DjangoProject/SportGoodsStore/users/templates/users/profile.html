@@ -3,6 +3,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -69,6 +70,65 @@
         <p>Скидка: {{ discount }} руб.</p>
         <p>Итого со скидкой: {{ total_with_discount }} руб.</p>
         <button type="button" onclick="location.href='{% url 'orders:order_create' %}'">Оформить заказ</button>
+
+        <!-- Секция для графика -->
+        <div class="chart-section">
+            <h2>Общая статистика покупок пользователей по сайту</h2>
+            <canvas id="purchasesChart" width="400" height="200"></canvas>
+        </div>
     </div>
 </div>
+
+<script>
+    // Загружаем данные для графика
+    fetch("{% url 'users:purchase_statistics' %}")
+    .then(response => response.json())
+    .then(data => {
+        const labels = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        const datasets = [];
+
+        for (const [category, values] of Object.entries(data)) {
+            datasets.push({
+                label: category,
+                data: values,
+                borderColor: getRandomColor(),
+                backgroundColor: getRandomColor(0.2),
+                fill: false
+            });
+        }
+
+        const ctx = document.getElementById('purchasesChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Месяц'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Количество продуктов'
+                        }
+                    }
+                }
+            }
+        });
+    });
+
+    function getRandomColor(alpha = 1) {
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+</script>
 {% endblock %}

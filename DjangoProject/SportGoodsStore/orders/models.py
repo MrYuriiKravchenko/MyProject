@@ -9,9 +9,10 @@ class Order(models.Model):
     address = models.CharField(max_length=250, verbose_name='Адрес')
     postal_code = models.CharField(max_length=20, verbose_name='Почтовый индекс')
     city = models.CharField(max_length=100, verbose_name='Город')
+    phone = models.CharField(max_length=20, verbose_name='Номер телефона', blank=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     updated = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
-    paid = models.BooleanField(default=False,verbose_name='Оплачен')
+    paid = models.BooleanField(default=False, verbose_name='Оплачен')
 
     class Meta:
         ordering = ['-created']
@@ -20,7 +21,6 @@ class Order(models.Model):
         ]
         verbose_name = 'Заказы'
         verbose_name_plural = 'Заказы'
-
 
     def __str__(self):
         return f'Заказ {self.id}'

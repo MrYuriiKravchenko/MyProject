@@ -1,11 +1,15 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views import generic
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.views import generic, View
+from django.shortcuts import redirect
 from django.contrib import messages
+from django.http import JsonResponse
+from datetime import datetime
+from django.views.generic import UpdateView
 from cart.cart import Cart
-from .forms import CustomUserChangeForm
-from .forms import CustomUserCreationForm
+from orders.models import OrderItem
+from shop.models import Category
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 
 class SignupPageView(generic.CreateView):
@@ -14,30 +18,47 @@ class SignupPageView(generic.CreateView):
     template_name = 'registration/signup.html'
 
 
-@login_required
-def profile_view(request):
-    user = request.user
-    cart = Cart(request)
+class ProfileView(LoginRequiredMixin, UpdateView):
+    form_class = CustomUserChangeForm
+    template_name = 'users/profile.html'
+    success_url = reverse_lazy('users:profile')
 
-    if request.method == 'POST':
-        form = CustomUserChangeForm(request.POST, request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Ваш профиль успешно обновлен.')
-            return redirect('users:profile')
-        else:
-            messages.error(request, 'Пожалуйста, исправьте ошибки в форме.')
-    else:
-        form = CustomUserChangeForm(instance=user)
+    def get_object(self):
+        return self.request.user
 
-    # Получаем информацию о скидке и сумме с учетом скидки
-    discount = cart.get_discount()
-    total_with_discount = cart.get_total_price_after_discount()
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, 'Ваш профиль успешно обновлен')
+        return redirect(self.success_url)
 
-    context = {
-        'form': form,
-        'cart': cart,
-        'discount': discount,
-        'total_with_discount': total_with_discount,
-    }
-    return render(request, 'users/profile.html', context)
+    def form_invalid(self, form):
+        messages.error(self.request, 'Пожалуйста, исправте ошибки в форме')
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = Cart(self.request)
+        context['cart'] = cart
+        context['discount'] = cart.get_discount()
+        context['total_with_discount'] = cart.get_total_price_after_discount()
+        return context
+
+
+class PurchaseStatisticsView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        current_year = datetime.now().year
+        categories = Category.objects.all()
+        data = {}
+
+        for category in categories:
+            monthly_purchases = []
+            for month in range(1, 13):
+                count = OrderItem.objects.filter(
+                    product__category=category,
+                    order__created__year=current_year,
+                    order__created__month=month
+                ).count()
+                monthly_purchases.append(count)
+            data[category.name] = monthly_purchases
+
+        return JsonResponse(data)

@@ -122,6 +122,11 @@ button[type="button"]:hover {
     text-align: right;
 }
 
+.chart-section {
+    margin-top: 20px;
+    width: 100%;
+}
+
 /* Адаптивные стили */
 @media (max-width: 768px) {
     .container {
