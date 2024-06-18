@@ -71,9 +71,8 @@
         <p>Итого со скидкой: {{ total_with_discount }} руб.</p>
         <button type="button" onclick="location.href='{% url 'orders:order_create' %}'">Оформить заказ</button>
 
-        <!-- Секция для графика -->
         <div class="chart-section">
-            <h2>Общая статистика покупок пользователей по сайту</h2>
+            <h2>Общая статистика покупок пользователей</h2>
             <canvas id="purchasesChart" width="400" height="200"></canvas>
         </div>
     </div>
