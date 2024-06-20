@@ -1,9 +1,12 @@
-from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q, Avg
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, TemplateView
-from .models import Product, Category
+from .models import Product, Category, Rating, Comment
 from cart.forms import CartAddProductForm
-from .forms import ProductFilterForm
+from .forms import ProductFilterForm, RatingForm, CommentForm
 from django.core.paginator import Paginator
 from .recommender import Recommender
 
@@ -57,12 +60,51 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = self.get_object()
+        user = self.request.user
+
         context['cart_product_form'] = CartAddProductForm()
+        context['rating_form'] = RatingForm()
+        context['comment_form'] = CommentForm()
+        context['average_rating'] = product.ratings.aggregate(Avg('score'))['score__avg']
+        context['comments'] = product.comments.all()
+
+        if user.is_authenticated:
+            user_rating = product.ratings.filter(user=user).first()
+            context['rating_value'] = user_rating.score if user_rating else None
+        else:
+            context['rating_value'] = None
 
         r = Recommender()
         recommended_products = r.suggest_products_for([product], 4)
         context['recommended_products'] = recommended_products
         return context
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        product = self.get_object()
+        if 'rating' in request.POST:
+            rating_form = RatingForm(request.POST)
+            if rating_form.is_valid():
+                rating, created = Rating.objects.update_or_create(
+                    product=product,
+                    user=request.user,
+                    defaults={'score': rating_form.cleaned_data['score']}
+                )
+                average_rating = product.ratings.aggregate(Avg('score'))['score__avg']
+                return JsonResponse({
+                    'average_rating': average_rating,
+                    'user_rating': rating.score
+                })
+        elif 'comment' in request.POST:
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                Comment.objects.create(
+                    product=product,
+                    user=request.user,
+                    text=comment_form.cleaned_data['text']
+                )
+                return JsonResponse({'status': 'success'})
+            return JsonResponse({'status': 'error'}, status=400)
 
 
 class SearchResultsListView(ListView):

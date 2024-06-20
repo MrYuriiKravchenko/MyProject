@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 
+from users.models import User
+
 
 class Product(models.Model):
     category = models.ForeignKey('Category', related_name='products', on_delete=models.CASCADE,
@@ -49,3 +51,33 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('shop:product_list_by_category', args=[self.slug])
+
+
+class Rating(models.Model):
+    product = models.ForeignKey(Product, related_name='ratings', on_delete=models.CASCADE, verbose_name='продукт')
+    user = models.ForeignKey(User, related_name='ratings', on_delete=models.CASCADE, verbose_name='пользователь')
+    score = models.PositiveSmallIntegerField(verbose_name='оценка')
+
+    class Meta:
+        unique_together = ('product', 'user')
+        ordering = ['-score']
+        verbose_name = 'Рейтинг'
+        verbose_name_plural = 'Рейтинг'
+
+    def __str__(self):
+        return f'{self.user} - {self.product} - {self.score}'
+
+
+class Comment(models.Model):
+    product = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE, verbose_name='продукт')
+    user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE, verbose_name='пользователь')
+    text = models.CharField(max_length=700, verbose_name='комментарий')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
+
+    class Meta:
+        ordering = ['-created']
+        verbose_name = 'Комментарии'
+        verbose_name_plural = 'Комментарии'
+
+    def __str__(self):
+        return f'{self.user} - {self.product} - {self.text[:20]}'

@@ -1,46 +1,78 @@
 {% extends "shop/base.html" %}
 {% load static %}
+{% load custom_filters %}
 
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+    <script src="{% static 'js/stars.js' %}"></script>
 {% endblock %}
 
 {% block title %}
-{{ product.name }}
+    {{ product.name }}
 {% endblock %}
+
 {% block content %}
 <div class="product-detail">
-    <div class="product-image">
-        <img src="{% if product.image %}{{ product.image.url }}{% else %}
-            {% static 'img/no_image.png' %}{% endif %}">
+    <div class="left-block stretched">
+        <div class="product-image">
+            <img src="{% if product.image %}{{ product.image.url }}{% else %}
+                {% static 'img/no_image.png' %}{% endif %}">
+        </div>
+        <!-- Комментарии и рейтинг -->
+        <div class="rating">
+            <h3>Рейтинг: {{ average_rating|default:"нет оценок" }}</h3>
+            <form method="post" action="." id="rating-form">
+                {% csrf_token %}
+                <div class="star-rating">
+                    {% for i in 5|to_0 %}
+                        <input type="radio" id="star{{ i }}" name="score" value="{{ i }}" {% if i == rating_value %}checked{% endif %}/>
+                        <label for="star{{ i }}" title="{{ i }} звезд"></label>
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="rating" value="true">
+                <input type="submit" value="Оценить" class="rating-submit">
+            </form>
+        </div>
+        <!-- Комментарии -->
+        <div class="comments">
+            <h3>Комментарии:</h3>
+            {% for comment in comments %}
+                <div class="comment">
+                    <strong>{{ comment.user.username }}</strong>
+                    <p>{{ comment.text }}</p>
+                    <small>{{ comment.created }}</small>
+                </div>
+            {% endfor %}
+            <h4>Добавить комментарий:</h4>
+            {% if user.is_authenticated %}
+            <form method="post" action="." id="comment-form">
+                {% csrf_token %}
+                {{ comment_form }}
+                <input type="hidden" name="comment" value="true">
+                <input type="submit" value="Комментировать" class="large-button">
+            </form>
+            {% else %}
+                <p>Пожалуйста, <a href="{% url 'account_login' %}">войдите</a>, чтобы оставить комментарий.</p>
+            {% endif %}
+        </div>
     </div>
-    <div class="product-info">
-        <h1>{{ product.name }}</h1>
-        <h2>
-            <a href="{{ product.category.get_absolute_url }}">
-                {{ product.category }}
-            </a>
-        </h2>
-        <p class="price">₽ {{ product.price }}</p>
-        <form action="{% url 'cart:cart_add' product.id %}" method="post">
-            {{ cart_product_form }}
-            {% csrf_token %}
-            <input type="submit" value="Добавить в корзину">
-        </form>
-        <p>{{ product.description|linebreaks }}</p>
-        {% if recommended_products %}
-            <div class="recommendations">
-                <h3>Люди, которые купили это, также купили</h3>
-                {% for p in recommended_products %}
-                    <div class="item">
-                        <a href="{{ p.get_absolute_url }}">
-                            <img src="{% if p.image %}{{ p.image.url }}{% else %}
-                            {% static 'img/no_image.png' %}{% endif %}">
-                        </a>
-                        <p><a href="{{ p.get_absolute_url }}">{{ p.name }}</a></p>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+    <div class="right-block">
+        <div class="product-info">
+            <h1>{{ product.name }}</h1>
+            <h2>
+                <a href="{{ product.category.get_absolute_url }}">
+                    {{ product.category }}
+                </a>
+            </h2>
+            <p class="price">₽ {{ product.price }}</p>
+            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                {{ cart_product_form }}
+                {% csrf_token %}
+                <input type="submit" value="Добавить в корзину">
+            </form>
+            <p>{{ product.description|linebreaks }}</p>
+        </div>
     </div>
+
+</div>
 {% endblock %}

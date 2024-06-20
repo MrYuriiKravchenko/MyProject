@@ -148,6 +148,7 @@ nav {
 #sidebar h3 {
     font-size: 20px;
     margin-bottom: 15px;
+    margin-top: 0;
 }
 
 #sidebar ul {
@@ -395,30 +396,9 @@ footer {
         border-bottom: 1px solid #ddd;
     }
 
-    .product-list {
-        margin-top: 0;
-    }
-
-    .product-list h1 {
-        margin-bottom: 5px;
-    }
-
-    .banner {
-        display: none;
-    }
-}
-
-@media (max-width: 480px) {
-    .product-list .item {
-        flex: 1 1 calc(50% - 20px);
-    }
-
-    .product-list {
-        margin-top: 0;
-    }
-
-    .product-list h1 {
-        margin-bottom: 5px;
+    #main {
+        width: 100%;
+        padding: 20px 0;
     }
 }
 
@@ -465,19 +445,178 @@ footer {
     background-color: #0056b3;
     transform: scale(1.05);
 }
+
 .logout-button {
     background: none;
     border: none;
     color: #fff;
     font-weight: bold;
-    font-size: 18px; /* Добавьте размер шрифта */
+    font-size: 18px;
     cursor: pointer;
     text-decoration: none;
     transition: color 0.3s ease;
-    padding: 0; /* Убедитесь, что padding и margin такие же */
+    padding: 0;
     margin: 0;
 }
 
 .logout-button:hover {
     color: #007bff;
+}
+
+/* Styles for the star rating */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: left;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 30px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.star-rating label::before {
+    content: "\2605"; /* Unicode star character */
+    display: inline-block;
+}
+
+.star-rating input[type="radio"]:checked ~ label,
+.star-rating input[type="radio"]:checked ~ label ~ label {
+    color: #ffca08; /* Color for selected stars */
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #ffca08; /* Color for hovered stars */
+}
+
+/* Стили для кнопки "Оценить" */
+.rating-submit {
+    margin-top: 10px;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+}
+
+.rating-submit:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.product-detail {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.left-block {
+    width: 50%;
+    padding-right: 20px;
+}
+
+.right-block {
+    width: 50%;
+}
+
+.left-block .rating {
+    flex: none;
+}
+
+/* Стили для комментариев */
+.comments {
+    margin-top: 20px;
+}
+
+.comments h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #007bff;
+}
+
+.comment {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.comment strong {
+    font-size: 16px;
+    color: #333;
+}
+
+.comment p {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.comment small {
+    font-size: 12px;
+    color: #999;
+}
+
+.comments h4 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.comments form {
+    display: flex;
+    flex-direction: column;
+}
+
+.comments textarea {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.comments .large-button {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+    align-self: flex-start;
+}
+
+.comments .large-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .product-detail {
+        flex-direction: column;
+    }
+    .left-block, .right-block, .comments {
+        width: 100%;
+        padding-right: 0;
+        order: unset;
+    }
+}
+.right-block h1 {
+    text-align: center;
 }

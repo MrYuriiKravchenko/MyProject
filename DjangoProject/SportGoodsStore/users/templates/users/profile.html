@@ -69,7 +69,10 @@
         <p>Итого: {{ cart.get_total_price }} руб.</p>
         <p>Скидка: {{ discount }} руб.</p>
         <p>Итого со скидкой: {{ total_with_discount }} руб.</p>
-        <button type="button" onclick="location.href='{% url 'orders:order_create' %}'">Оформить заказ</button>
+
+        {% if cart %}
+            <button type="button" onclick="location.href='{% url 'orders:order_create' %}'">Оформить заказ</button>
+        {% endif %}
 
         <div class="chart-section">
             <h2>Общая статистика покупок пользователей</h2>

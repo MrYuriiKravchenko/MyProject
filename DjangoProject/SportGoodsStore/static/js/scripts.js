@@ -4,20 +4,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchForm = document.querySelector('.search-form');
     const cartIndicator = document.querySelector('.cart-indicator');
 
-    menuToggle.addEventListener('click', function () {
-        navLinks.classList.toggle('active');
-        searchForm.classList.toggle('active');
-    });
-
-    // Example function to add an item to the cart
-    function addToCart() {
-        let itemCount = parseInt(cartIndicator.textContent) || 0;
-//        itemCount++;
-        cartIndicator.textContent = itemCount;
-        cartIndicator.style.display = 'inline';
+    // Проверяем наличие элементов перед добавлением обработчиков событий и изменением свойств
+    if (menuToggle && navLinks && searchForm) {
+        menuToggle.addEventListener('click', function () {
+            navLinks.classList.toggle('active');
+            searchForm.classList.toggle('active');
+        });
+    } else {
+        console.error('Не все элементы меню найдены в DOM.');
     }
 
-    // Call this function when an item is added to the cart
-    // For demonstration, let's assume an item is added to the cart when the page loads
-    addToCart();
+    if (cartIndicator) {
+        // Пример функции для добавления элемента в корзину
+        function addToCart() {
+            let itemCount = parseInt(cartIndicator.textContent) || 0;
+//            itemCount++; // Увеличиваем количество товаров в корзине
+//            cartIndicator.textContent = itemCount;
+            cartIndicator.style.display = 'inline';
+        }
+
+        // Вызываем эту функцию, когда элеменят добавлен в корзину
+        // Для демонстрации предположим, что элемент добавлен в корзину при загрузке страницы
+        addToCart();
+    } else {
+        console.error('Элемент "cartIndicator" не найден в DOM.');
+    }
 });
