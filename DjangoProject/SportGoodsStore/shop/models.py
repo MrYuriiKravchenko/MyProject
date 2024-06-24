@@ -53,6 +53,20 @@ class Category(models.Model):
         return reverse('shop:product_list_by_category', args=[self.slug])
 
 
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, related_name='wishlists', on_delete=models.CASCADE, verbose_name='Пользователь')
+    product = models.ForeignKey(Product, related_name='wishlists', on_delete=models.CASCADE, verbose_name='Продукт')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='дата добавления')
+
+    class Meta:
+        unique_together = ('user', 'product')
+        verbose_name = 'Список желаний'
+        verbose_name_plural = 'Список желаний'
+
+    def __str__(self):
+        return f"{self.user} - {self.product}"
+
+
 class Rating(models.Model):
     product = models.ForeignKey(Product, related_name='ratings', on_delete=models.CASCADE, verbose_name='продукт')
     user = models.ForeignKey(User, related_name='ratings', on_delete=models.CASCADE, verbose_name='пользователь')

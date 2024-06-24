@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Avg
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, TemplateView
-from .models import Product, Category, Rating, Comment
+from .models import Product, Category, Rating, Comment, Wishlist
 from cart.forms import CartAddProductForm
-from .forms import ProductFilterForm, RatingForm, CommentForm
+from .forms import ProductFilterForm, RatingForm, CommentForm, WishlistForm
 from django.core.paginator import Paginator
 from .recommender import Recommender
 
@@ -44,6 +44,12 @@ class ProductListView(ListView):
 
         context['filter_form'] = ProductFilterForm(self.request.GET)
 
+        if self.request.user.is_authenticated:
+            context['user_wishlist'] = self.request.user.wishlists.values_list('product_id', flat=True)
+        else:
+            context['user_wishlist'] = []
+
+
         return context
 
 
@@ -62,10 +68,19 @@ class ProductDetailView(DetailView):
         product = self.get_object()
         user = self.request.user
 
+        @property
+        def average_rating(self):
+            avg_rating = self.ratings.aggregate(Avg('score'))['score__avg']
+            return round(avg_rating, 1) if avg_rating else None
+
         context['cart_product_form'] = CartAddProductForm()
         context['rating_form'] = RatingForm()
         context['comment_form'] = CommentForm()
-        context['average_rating'] = product.ratings.aggregate(Avg('score'))['score__avg']
+        average_rating = product.ratings.aggregate(Avg('score'))['score__avg']
+        if average_rating is not None:
+            context['average_rating'] = round(average_rating, 1)
+        else:
+            context['average_rating'] = None
         context['comments'] = product.comments.all()
 
         if user.is_authenticated:
@@ -92,7 +107,7 @@ class ProductDetailView(DetailView):
                 )
                 average_rating = product.ratings.aggregate(Avg('score'))['score__avg']
                 return JsonResponse({
-                    'average_rating': average_rating,
+                    'average_rating': round(average_rating, 1),
                     'user_rating': rating.score
                 })
         elif 'comment' in request.POST:
@@ -122,3 +137,37 @@ class SearchResultsListView(ListView):
 
 class AboutPageView(TemplateView):
     template_name = 'about.html'
+
+@login_required
+def add_to_wishlist(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    user = request.user
+
+    # Check if the product is already in the wishlist
+    if Wishlist.objects.filter(user=user, product=product).exists():
+        return JsonResponse({'status': 'exists'}, status=400)
+
+    # Add the product to the wishlist
+    Wishlist.objects.create(user=user, product=product)
+    return JsonResponse({'status': 'added'})
+
+@login_required
+def remove_from_wishlist(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    user = request.user
+
+    # Remove the product from the wishlist
+    wishlist_item = Wishlist.objects.filter(user=user, product=product)
+    if wishlist_item.exists():
+        wishlist_item.delete()
+        return JsonResponse({'status': 'removed'})
+    return JsonResponse({'status': 'not_found'}, status=400)
+
+@login_required
+def wishlist(request):
+    wishlist_items = Wishlist.objects.filter(user=request.user).select_related('product')
+    for item in wishlist_items:
+        item.product.average_rating = item.product.ratings.aggregate(Avg('score'))['score__avg']
+    return render(request, 'shop/wishlist.html', {'wishlist_items': wishlist_items})
+
+

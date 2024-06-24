@@ -1,0 +1,33 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/wishlist.css' %}">
+    <script src="{% static 'js/wishlist.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+  <div class="wishlist-container">
+    <h1>Мой список желаний</h1>
+    {% csrf_token %}
+    <ul class="wishlist">
+      {% for item in wishlist_items %}
+        <li class="wishlist-item" data-product-id="{{ item.product.id }}">
+          <div class="product-image">
+            <img src="{% if item.product.image %}{{ item.product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ item.product.name }}">
+          </div>
+          <div class="product-info">
+            <h2>{{ item.product.name }}</h2>
+            <p class="product-price">{{ item.product.price }} руб.</p>
+            <div class="product-rating">
+              <span class="star">&#9733;</span>
+              <span class="rating-value">{{ item.product.average_rating|default:"N/A" }}</span>
+            </div>
+            <a class="view-link" href="{{ item.product.get_absolute_url }}">Посмотреть</a>
+            <button class="remove-button" onclick="removeFromWishlist({{ item.product.id }})">Удалить</button>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

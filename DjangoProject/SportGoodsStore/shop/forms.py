@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Rating, Comment
+from .models import Rating, Comment, Wishlist
 
 SORT_CHOICES = [
     ('asc', 'По возростанию цены'),
@@ -33,3 +33,9 @@ class CommentForm(forms.ModelForm):
                 'style': 'resize:vertical;'
             }),
         }
+
+
+class WishlistForm(forms.ModelForm):
+    class Meta:
+        model = Wishlist
+        fields = ['product']

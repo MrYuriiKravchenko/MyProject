@@ -620,3 +620,22 @@ footer {
 .right-block h1 {
     text-align: center;
 }
+/* Add this to your CSS file, e.g., styles.css */
+.wishlist-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.heart-not-added::before {
+    content: '♡'; /* Unicode for empty heart */
+    color: red;
+    font-size: 24px;
+}
+
+.heart-added::before {
+    content: '♥'; /* Unicode for filled heart */
+    color: red;
+    font-size: 24px;
+}

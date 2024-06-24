@@ -12,7 +12,7 @@
 .profile-section, .cart-section {
     flex: 1;
     background: #f9f9f9;
-    padding: 20px;
+    padding: 5px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -155,4 +155,28 @@ button[type="button"]:hover {
     .profile-section, .cart-section {
         flex: 1 1 100%;
     }
+}
+/* Existing styles */
+
+/* Wishlist Button Styling */
+.wishlist-button {
+    background-color: orange !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    font-size: 16px !important;
+    border-radius: 5px !important; /* Added border-radius for a rounded button look */
+    transition: background-color 0.3s !important; /* Added transition for smooth color change */
+}
+
+.wishlist-button:hover {
+    background-color: darkorange !important; /* Darker shade for hover effect */
+}
+
+.wishlist-button span {
+    font-size: 20px !important;
 }

@@ -56,6 +56,11 @@
     </div>
 
     <div class="cart-section">
+        <h2>Ваш список желаний</h2>
+        <button class="wishlist-button" type="button" onclick="location.href='{% url 'shop:wishlist' %}'">
+            <span>&#x2764;</span> Перейти к списку желаний
+        </button>
+
         <h2>Корзина</h2>
         <ul>
             {% for item in cart %}
@@ -86,39 +91,32 @@
     fetch("{% url 'users:purchase_statistics' %}")
     .then(response => response.json())
     .then(data => {
-        const labels = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-        const datasets = [];
-
-        for (const [category, values] of Object.entries(data)) {
-            datasets.push({
-                label: category,
-                data: values,
-                borderColor: getRandomColor(),
-                backgroundColor: getRandomColor(0.2),
-                fill: false
-            });
-        }
+        const labels = Object.keys(data);
+        const values = Object.values(data).flat();
 
         const ctx = document.getElementById('purchasesChart').getContext('2d');
         new Chart(ctx, {
-            type: 'line',
+            type: 'pie', // Изменение типа графика на круговой (pie)
             data: {
                 labels: labels,
-                datasets: datasets
+                datasets: [{
+                    data: values,
+                    backgroundColor: labels.map(() => getRandomColor(0.6)),
+                    borderColor: labels.map(() => getRandomColor(1)),
+                    borderWidth: 1
+                }]
             },
             options: {
                 responsive: true,
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Месяц'
-                        }
+                plugins: {
+                    legend: {
+                        position: 'top',
                     },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Количество продуктов'
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return `${labels[tooltipItem.dataIndex]}: ${values[tooltipItem.dataIndex]}`;
+                            }
                         }
                     }
                 }
@@ -133,4 +131,5 @@
         return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }
 </script>
+
 {% endblock %}

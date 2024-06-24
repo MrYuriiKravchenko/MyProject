@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import Category, Product, Comment, Rating
+from .models import Category, Product, Comment, Rating, Wishlist
+
+
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ['user', 'product', 'created']
+    list_filter = ['product', 'created']
+    search_fields = ['product', 'user']
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -42,3 +48,4 @@ class ProductAdmin(admin.ModelAdmin):
 
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Rating, RatingAdmin)
+admin.site.register(Wishlist, WishlistAdmin)

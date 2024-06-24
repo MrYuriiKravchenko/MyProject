@@ -51,14 +51,10 @@ class PurchaseStatisticsView(LoginRequiredMixin, View):
         data = {}
 
         for category in categories:
-            monthly_purchases = []
-            for month in range(1, 13):
-                count = OrderItem.objects.filter(
-                    product__category=category,
-                    order__created__year=current_year,
-                    order__created__month=month
-                ).count()
-                monthly_purchases.append(count)
-            data[category.name] = monthly_purchases
+            total_purchases = OrderItem.objects.filter(
+                product__category=category,
+                order__created__year=current_year
+            ).count()
+            data[category.name] = total_purchases
 
         return JsonResponse(data)

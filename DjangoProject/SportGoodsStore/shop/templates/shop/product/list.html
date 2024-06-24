@@ -20,7 +20,6 @@
                 {% endfor %}
             </ul>
 
-            <!-- Форма для фильтрации -->
             <div class="filter-form">
                 <form method="get">
                     {{ filter_form.sort_by.label_tag }}
@@ -41,14 +40,17 @@
                     <div class="item-details">
                         <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
                         <span class="price">₽ {{ product.price }}</span>
-                        <button class="add-to-cart">В корзину</button>
+                        <button class="wishlist-button {% if request.user.is_authenticated and product.id in user_wishlist %}heart-added{% else %}heart-not-added{% endif %}"
+                            data-product-id="{{ product.id }}"
+                            data-action="{% if request.user.is_authenticated and product.id in user_wishlist %}remove{% else %}add{% endif %}"
+                            {% if not request.user.is_authenticated %}data-login-required="true"{% endif %}>
+                        </button>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- Pagination -->
     {% if page_obj.has_other_pages %}
     <nav class="list-pages">
         <ul>
@@ -76,5 +78,47 @@
         </ul>
     </nav>
     {% endif %}
-    <!-- End Pagination -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.wishlist-button').forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            if (this.dataset.loginRequired) {
+                window.location.href = '{% url "account_login" %}';
+                return;
+            }
+
+            const productId = this.dataset.productId;
+            const action = this.dataset.action;
+            const url = action === 'add' ? '{% url "shop:add_to_wishlist" 0 %}'.slice(0, -2) + productId + '/' :
+                                           '{% url "shop:remove_from_wishlist" 0 %}'.slice(0, -2) + productId + '/';
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'added') {
+                    this.dataset.action = 'remove';
+                    this.classList.remove('heart-not-added');
+                    this.classList.add('heart-added');
+                } else if (data.status === 'removed') {
+                    this.dataset.action = 'add';
+                    this.classList.remove('heart-added');
+                    this.classList.add('heart-not-added');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+</script>
+
 {% endblock %}
