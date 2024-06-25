@@ -5,6 +5,8 @@ from .models import Rating, Comment, Wishlist
 SORT_CHOICES = [
     ('asc', 'По возростанию цены'),
     ('desc', 'По убыванию цены'),
+    ('rating_asc', 'По возрастанию рейтинга'),
+    ('rating_desc', 'По убыванию рейтинга'),
 ]
 
 

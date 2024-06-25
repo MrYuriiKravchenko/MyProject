@@ -60,11 +60,13 @@
     <div class="right-block">
         <div class="product-info">
             <h1>{{ product.name }}</h1>
-            <h2>
-                <a href="{{ product.category.get_absolute_url }}">
-                    {{ product.category }}
-                </a>
-            </h2>
+            <div class="category-info">
+                <h2>
+                    <a href="{{ product.category.get_absolute_url }}">
+                        {{ product.category }}
+                    </a>
+                </h2>
+            </div>
             <div class="share-buttons">
                 <h3>Поделиться:</h3>
                 <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="share-button facebook">
@@ -79,8 +81,10 @@
             </div>
             <p class="price">₽ {{ product.price }}</p>
             <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                {{ cart_product_form }}
                 {% csrf_token %}
+                <div class="quantity-control">
+                    {{ cart_product_form.quantity }}
+                </div>
                 <input type="submit" value="Добавить в корзину">
             </form>
             <p>{{ product.description|linebreaks }}</p>
@@ -89,3 +93,5 @@
 
 </div>
 {% endblock %}
+
+

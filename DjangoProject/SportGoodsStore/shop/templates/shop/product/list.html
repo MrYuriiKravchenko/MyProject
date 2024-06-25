@@ -40,12 +40,19 @@
                     <div class="item-details">
                         <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
                         <span class="price">₽ {{ product.price }}</span>
-                        <button class="wishlist-button {% if request.user.is_authenticated and product.id in user_wishlist %}heart-added{% else %}heart-not-added{% endif %}"
-                            data-product-id="{{ product.id }}"
-                            data-action="{% if request.user.is_authenticated and product.id in user_wishlist %}remove{% else %}add{% endif %}"
-                            {% if not request.user.is_authenticated %}data-login-required="true"{% endif %}>
-                        </button>
+                        <div class="product-interactions">
+                            <div class="product-rating">
+                                <span class="star">&#9733;</span>
+                                <span class="rating-value">{{ product.average_rating|default:"N/A" }}</span>
+                            </div>
+                            <button class="wishlist-button {% if request.user.is_authenticated and product.id in user_wishlist %}heart-added{% else %}heart-not-added{% endif %}"
+                                data-product-id="{{ product.id }}"
+                                data-action="{% if request.user.is_authenticated and product.id in user_wishlist %}remove{% else %}add{% endif %}"
+                                {% if not request.user.is_authenticated %}data-login-required="true"{% endif %}>
+                            </button>
+                        </div>
                     </div>
+
                 </div>
             {% endfor %}
         </div>

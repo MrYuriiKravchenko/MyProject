@@ -135,3 +135,34 @@
         margin-bottom: 10px;
     }
 }
+/* wishlist.css */
+.remove-from-wishlist {
+    background-color: #ff4c4c; /* Red background */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 10px 20px; /* Padding for spacing */
+    font-size: 14px; /* Font size */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+.remove-from-wishlist:hover {
+    background-color: #ff1a1a; /* Darker red on hover */
+}
+.empty-wishlist-message {
+    text-align: center; /* Center the message */
+    margin-top: 50px; /* Space above the message */
+    font-size: 18px; /* Font size for the message */
+    color: #333; /* Text color */
+}
+
+.empty-wishlist-message a {
+    color: #007bff; /* Link color */
+    text-decoration: none; /* Remove underline */
+    font-weight: bold; /* Bold link text */
+}
+
+.empty-wishlist-message a:hover {
+    text-decoration: underline; /* Underline on hover */
+}

@@ -30,6 +30,12 @@ class ProductListView(ListView):
             queryset = queryset.order_by('price')
         elif sort_by == 'desc':
             queryset = queryset.order_by('-price')
+        elif sort_by == 'rating_asc':
+            queryset = queryset.annotate(average_rating=Avg('ratings__score')).order_by('average_rating')
+        elif sort_by == 'rating_desc':
+            queryset = queryset.annotate(average_rating=Avg('ratings__score')).order_by('-average_rating')
+
+        queryset = queryset.annotate(average_rating=Avg('ratings__score'))
 
         return queryset
 
@@ -150,6 +156,7 @@ def add_to_wishlist(request, product_id):
     # Add the product to the wishlist
     Wishlist.objects.create(user=user, product=product)
     return JsonResponse({'status': 'added'})
+
 
 @login_required
 def remove_from_wishlist(request, product_id):

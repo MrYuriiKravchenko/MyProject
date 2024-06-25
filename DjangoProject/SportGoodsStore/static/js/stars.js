@@ -38,4 +38,12 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Ошибка:', error));
         });
     }
+
+    // Добавляем проверку на авторизацию для формы оценки
+    if (ratingForm && !{{ user.is_authenticated|lower }}) {
+        ratingForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            window.location.href = '{% url "account_login" %}?next={{ request.path }}';
+        });
+    }
 });

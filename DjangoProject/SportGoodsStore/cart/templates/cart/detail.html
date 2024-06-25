@@ -113,3 +113,15 @@
         {% endif %}
     </p>
 {% endblock %}
+<script>
+    document.querySelectorAll('.quantity-button').forEach(button => {
+    button.addEventListener('click', (event) => {
+        const input = event.target.closest('form').querySelector('.quantity-input');
+        if (event.target.textContent === '-') {
+            input.stepDown();
+        } else {
+            input.stepUp();
+        }
+    });
+});
+</script>

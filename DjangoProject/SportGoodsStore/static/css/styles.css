@@ -621,6 +621,16 @@ footer {
     text-align: center;
 }
 /* Add this to your CSS file, e.g., styles.css */
+.product-interactions {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.product-interactions .wishlist-button {
+    margin-left: 10px;
+}
+
 .wishlist-button {
     background: none;
     border: none;
@@ -638,4 +648,21 @@ footer {
     content: '♥'; /* Unicode for filled heart */
     color: red;
     font-size: 24px;
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.star {
+    color: #ff0;
+    font-size: 1.5em;
+    margin-right: 5px;
+}
+
+.rating-value {
+    font-size: 1.2em;
+    color: #666;
 }

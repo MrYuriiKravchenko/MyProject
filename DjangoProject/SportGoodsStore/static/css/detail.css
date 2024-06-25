@@ -263,3 +263,17 @@ a.login-link:hover {
     color: white;
 }
 
+.category-info {
+    margin-top: 10px; /* пример отступа сверху */
+}
+
+.category-info a {
+    color: #ff6347; /* новый цвет ссылки (оранжевый, например) */
+    text-decoration: none; /* убрать подчеркивание ссылки */
+    font-weight: bold; /* жирный текст */
+}
+
+.category-info a:hover {
+    text-decoration: underline; /* подчеркивание при наведении */
+    color: #ff4500; /* изменение цвета при наведении (оранжевый, например) */
+}

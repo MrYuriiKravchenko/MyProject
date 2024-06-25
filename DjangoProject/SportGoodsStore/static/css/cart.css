@@ -1,3 +1,5 @@
+/* cart.css */
+
 .cart {
     width: 100%;
     border-collapse: collapse;
@@ -308,5 +310,53 @@
     .coupon-form-container {
         margin-right: 0;
         justify-content: center;  /* Center align for small screens */
+    }
+}
+
+/* New styles to align quantity control with detail.css */
+.quantity-control {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 5px;
+}
+
+.quantity-button:hover {
+    background-color: #0056b3;
+}
+
+.quantity-input {
+    width: 60px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+@media (max-width: 768px) {
+    .quantity-control {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .quantity-button {
+        padding: 5px;
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+    .quantity-input {
+        width: 50px;
+        padding: 3px;
     }
 }

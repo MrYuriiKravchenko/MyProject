@@ -39,3 +39,28 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.remove-from-wishlist').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            let productId = this.getAttribute('data-product-id');
+            let csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+            fetch(`/wishlist/remove/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'removed') {
+                    document.querySelector(`.wishlist-item[data-product-id="${productId}"]`).remove();
+                } else {
+                    alert('Произошла ошибка при удалении товара из списка желаний.');
+                }
+            });
+        });
+    });
+});
