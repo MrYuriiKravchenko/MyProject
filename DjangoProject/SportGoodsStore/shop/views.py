@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Sum
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, TemplateView
+
+from orders.models import OrderItem
 from .models import Product, Category, Rating, Comment, Wishlist
 from cart.forms import CartAddProductForm
 from .forms import ProductFilterForm, RatingForm, CommentForm, WishlistForm

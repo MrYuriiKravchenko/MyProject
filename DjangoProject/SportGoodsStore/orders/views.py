@@ -13,18 +13,23 @@ class OrderCreateView(FormView):
 
     def form_valid(self, form):
         cart = Cart(self.request)
-        order = form.save()
-        for item in cart:
-            OrderItem.objects.create(
-                order=order,
-                product=item['product'],
-                price=item['price'],
-                quantity=item['quantity']
-            )
-        # Очистить корзину
-        cart.clear()
-        # запустить асинхронное задание
-        order_created.delay(order.id)
+        if not cart:
+            return redirect('cart:cart_detail')
+
+        try:
+            order = form.save()
+            for item in cart:
+                OrderItem.objects.create(
+                    order=order,
+                    product=item['product'],
+                    price=item['price'],
+                    quantity=item['quantity']
+                )
+            cart.clear()
+            order_created.delay(order.id)
+        except Exception as e:
+            return render(self.request, 'orders/order/create.html', {'form': form, 'error': str(e)})
+
         return render(self.request, 'orders/order/created.html', {'order': order})
 
     def get_context_data(self, **kwargs):

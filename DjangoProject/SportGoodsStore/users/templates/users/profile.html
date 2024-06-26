@@ -79,56 +79,60 @@
         {% endif %}
 
         <div class="chart-section">
-            <h2>Общая статистика покупок пользователей</h2>
+            <h2>Количество заказов по категориям:</h2>
             <canvas id="purchasesChart" width="400" height="200"></canvas>
         </div>
     </div>
 </div>
 
 <script>
-    // Загружаем данные для графика
-    fetch("{% url 'users:purchase_statistics' %}")
-    .then(response => response.json())
-    .then(data => {
-        const labels = Object.keys(data);
-        const values = Object.values(data).flat();
+    document.addEventListener('DOMContentLoaded', function() {
+        // Загружаем данные для графика
+        fetch("{% url 'users:purchase_statistics' %}")
+        .then(response => response.json())
+        .then(data => {
+            const labels = Object.keys(data);
+            const values = Object.values(data);
 
-        const ctx = document.getElementById('purchasesChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'pie', // Изменение типа графика на круговой (pie)
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: values,
-                    backgroundColor: labels.map(() => getRandomColor(0.6)),
-                    borderColor: labels.map(() => getRandomColor(1)),
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                return `${labels[tooltipItem.dataIndex]}: ${values[tooltipItem.dataIndex]}`;
+            const ctx = document.getElementById('purchasesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie', // Тип графика круговой (pie)
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: labels.map(() => getRandomColor(0.6)),
+                        borderColor: labels.map(() => getRandomColor(1)),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    return `${label}: ${value}`;
+                                }
                             }
                         }
                     }
                 }
-            }
+            });
         });
-    });
 
-    function getRandomColor(alpha = 1) {
-        const r = Math.floor(Math.random() * 255);
-        const g = Math.floor(Math.random() * 255);
-        const b = Math.floor(Math.random() * 255);
-        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-    }
+        function getRandomColor(alpha = 1) {
+            const r = Math.floor(Math.random() * 255);
+            const g = Math.floor(Math.random() * 255);
+            const b = Math.floor(Math.random() * 255);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+    });
 </script>
 
 {% endblock %}

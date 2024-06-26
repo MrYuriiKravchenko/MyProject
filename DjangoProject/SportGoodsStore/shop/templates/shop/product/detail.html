@@ -5,6 +5,19 @@
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/detail.css' %}">
     <script src="{% static 'js/stars.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ratingForm = document.getElementById('rating-form');
+            const userIsAuthenticated = {{ user.is_authenticated|lower }};
+
+            if (ratingForm && !userIsAuthenticated) {
+                ratingForm.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    window.location.href = '{% url "account_login" %}?next={{ request.path }}';
+                });
+            }
+        });
+    </script>
 {% endblock %}
 
 {% block title %}
@@ -93,5 +106,3 @@
 
 </div>
 {% endblock %}
-
-
