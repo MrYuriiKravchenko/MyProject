@@ -58,12 +58,16 @@
             {% endfor %}
             <h4>Добавить отзыв:</h4>
             {% if user.is_authenticated %}
-            <form method="post" action="." id="comment-form">
-                {% csrf_token %}
-                {{ comment_form }}
-                <input type="hidden" name="comment" value="true">
-                <input type="submit" value="Комментировать" class="large-button">
-            </form>
+                {% if user_commented %}
+                    <p>Вы можете оставить только один отзыв на продукт.</p>
+                {% else %}
+                    <form method="post" action="." id="comment-form">
+                        {% csrf_token %}
+                        {{ comment_form }}
+                        <input type="hidden" name="comment" value="true">
+                        <input type="submit" value="Комментировать" class="large-button">
+                    </form>
+                {% endif %}
             {% else %}
                 <p>Пожалуйста, <a href="{% url 'account_login' %}" class="login-link">войдите</a>, чтобы оставить комментарий или оценку.</p>
             {% endif %}

@@ -92,6 +92,7 @@ class Comment(models.Model):
         ordering = ['-created']
         verbose_name = 'Комментарии'
         verbose_name_plural = 'Комментарии'
+        unique_together = ('product', 'user')
 
     def __str__(self):
         return f'{self.user} - {self.product} - {self.text[:20]}'

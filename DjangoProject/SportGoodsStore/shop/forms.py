@@ -36,6 +36,18 @@ class CommentForm(forms.ModelForm):
             }),
         }
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.product = kwargs.pop('product', None)
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.user and self.product:
+            if Comment.objects.filter(use=self.user, product=self.product).exists():
+                raise forms.ValidationError('Вы уже оставили комментарий к этому продукту.')
+            return cleaned_data
+
 
 class WishlistForm(forms.ModelForm):
     class Meta:

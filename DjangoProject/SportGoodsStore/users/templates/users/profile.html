@@ -56,10 +56,6 @@
     </div>
 
     <div class="cart-section">
-        <button class="wishlist-button" type="button" onclick="location.href='{% url 'shop:wishlist' %}'">
-            <span>&#x2764;</span> Перейти к списку желаний
-        </button>
-
         <h2>Корзина</h2>
         <ul>
             {% for item in cart %}

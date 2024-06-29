@@ -35,6 +35,10 @@
                             {% endif %}
                         {% endwith %}
                     </li>
+                    <li><button class="wishlist-button" type="button" onclick="location.href='{% url 'shop:wishlist' %}'">
+                        <i class="fas fa-heart heart-icon"></i></button>
+                    </li>
+
                     {% if user.is_authenticated %}
                         <li>
                             <li><a href="{% url 'account_logout' %}">Выйти</a></li>

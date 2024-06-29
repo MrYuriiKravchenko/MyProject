@@ -2,9 +2,29 @@
 {% load static %}
 
 {% block title %}
-    About
+    О нас
 {% endblock title %}
 
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}">
+{% endblock head %}
+
 {% block content %}
-    <h1>About Page</h1>
+<div class="container">
+    <h1>О нас</h1>
+    <p>{{ description }}</p>
+    <h2>Наша миссия</h2>
+    <p>{{ mission }}</p>
+
+    <h2>Контакты</h2>
+    <p><strong>Python разработчик</strong></p>
+    <p>Кравченко Юрий Александрович</p>
+    <ul>
+        <li>
+            <a class="button" href="https://t.me/yuriikrav" target="_blank">Связаться в Telegram</a> <- предпочитаемый вид связи
+        </li>
+        <li>Email: <a class="email-link" href="mailto:misterkrava@yandex.ru">misterkrava@yandex.ru</a></li>
+        <li>Телефон: <a class="phone-link" href="tel:+79595331347">+7 959 533 13 47</a></li>
+    </ul>
+</div>
 {% endblock content %}
