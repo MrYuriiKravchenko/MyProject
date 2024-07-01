@@ -52,3 +52,12 @@ a.email-link:hover {
     color: #005f99;
     text-decoration: underline;
 }
+.github-icon {
+    font-size: 2em; /* Размер иконки, можно изменить по необходимости */
+    color: #333; /* Цвет иконки, можно изменить по необходимости */
+    transition: color 0.3s; /* Плавный переход цвета при наведении */
+}
+
+.github-icon:hover {
+    color: #4078c0; /* Цвет иконки при наведении */
+}

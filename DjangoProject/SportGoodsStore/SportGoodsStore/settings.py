@@ -172,7 +172,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 
-DEFAULT_FROM_EMAIL = "admin@djangobookstore.com" # 'новый_адрес@ваш_домен.com'
+DEFAULT_FROM_EMAIL = "admin@SportGoodsStore.ru" # 'новый_адрес@ваш_домен.com'
 
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
@@ -182,3 +182,5 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+
+ACCOUNT_ADAPTER = os.getenv('ACCOUNT_ADAPTER')

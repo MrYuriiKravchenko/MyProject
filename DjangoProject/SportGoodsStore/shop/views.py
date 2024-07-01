@@ -122,7 +122,8 @@ class ProductDetailView(DetailView):
             if comment_form.is_valid():
                 # Check if the user has already commented on this product
                 if Comment.objects.filter(product=product, user=request.user).exists():
-                    return JsonResponse({'status': 'error', 'message': 'You have already commented on this product.'}, status=400)
+                    return JsonResponse({'status': 'error', 'message': 'You have already commented on this product.'},
+                                        status=400)
                 Comment.objects.create(
                     product=product,
                     user=request.user,
@@ -130,7 +131,6 @@ class ProductDetailView(DetailView):
                 )
                 return JsonResponse({'status': 'success'})
             return JsonResponse({'status': 'error', 'message': 'Invalid comment data.'}, status=400)
-
 
 
 class SearchResultsListView(ListView):
@@ -151,17 +151,18 @@ class AboutPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['description'] = ("SportGoodsStore предлагает широкий выбор спортивных товаров от ведущих мировых брендов "
-                                  "для любителей активного образа жизни. Наша цель - вдохновить клиентов на достижение "
-                                  "спортивных целей с помощью качественных товаров и персонализированного сервиса. Мы гордимся "
-                                  "предоставлением клиентам только лучших решений для здоровья и фитнеса, делая каждую покупку "
-                                  "удобной и приятной.")
-        context['mission'] = ("Миссия SportGoodsStore заключается в предоставлении клиентам доступа к высококачественным "
-                              "спортивным товарам и инновационным решениям, способствующим активному образу жизни и достижению "
-                              "спортивных целей. Мы стремимся вдохновлять и поддерживать наших клиентов, обеспечивая оптимальное "
-                              "соотношение цены и качества, а также надежный и персонализированный сервис на каждом этапе сотрудничества.")
+        context['description'] = (
+            "SportGoodsStore предлагает широкий выбор спортивных товаров от ведущих мировых брендов "
+            "для любителей активного образа жизни. Наша цель - вдохновить клиентов на достижение "
+            "спортивных целей с помощью качественных товаров и персонализированного сервиса. Мы гордимся "
+            "предоставлением клиентам только лучших решений для здоровья и фитнеса, делая каждую покупку "
+            "удобной и приятной.")
+        context['mission'] = (
+            "Миссия SportGoodsStore заключается в предоставлении клиентам доступа к высококачественным "
+            "спортивным товарам и инновационным решениям, способствующим активному образу жизни и достижению "
+            "спортивных целей. Мы стремимся вдохновлять и поддерживать наших клиентов, обеспечивая оптимальное "
+            "соотношение цены и качества, а также надежный и персонализированный сервис на каждом этапе сотрудничества.")
         return context
-
 
 
 class AddToWishlistView(View):
