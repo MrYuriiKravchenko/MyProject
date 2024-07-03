@@ -120,7 +120,6 @@ class ProductDetailView(DetailView):
         elif 'comment' in request.POST:
             comment_form = CommentForm(request.POST)
             if comment_form.is_valid():
-                # Check if the user has already commented on this product
                 if Comment.objects.filter(product=product, user=request.user).exists():
                     return JsonResponse({'status': 'error', 'message': 'You have already commented on this product.'},
                                         status=400)
@@ -133,18 +132,24 @@ class ProductDetailView(DetailView):
             return JsonResponse({'status': 'error', 'message': 'Invalid comment data.'}, status=400)
 
 
+
 class SearchResultsListView(ListView):
     model = Product
-    context_object_name = 'product_list'
     template_name = 'shop/product/search_results.html'
-    paginate_by = 6
+    context_object_name = 'product_list'
+    paginate_by = 10
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
-        return Product.objects.filter(
-            Q(name__icontains=query) | Q(price__icontains=query)
-        ).order_by('-created')
+        query = self.request.GET.get('q', '')
+        if query:
+            return Product.objects.filter(name__icontains=query)
+        return Product.objects.none()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('q', '')
+        context['query'] = query
+        return context
 
 class AboutPageView(TemplateView):
     template_name = 'about.html'
