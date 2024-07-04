@@ -62,6 +62,10 @@ class Wishlist(models.Model):
         unique_together = ('user', 'product')
         verbose_name = 'Список желаний'
         verbose_name_plural = 'Список желаний'
+        indexes = [
+            models.Index(fields=['user']),
+            models.Index(fields=['product']),
+        ]
 
     def __str__(self):
         return f"{self.user} - {self.product}"
@@ -77,6 +81,11 @@ class Rating(models.Model):
         ordering = ['-score']
         verbose_name = 'Рейтинг'
         verbose_name_plural = 'Рейтинг'
+        indexes = [
+            models.Index(fields=['product']),
+            models.Index(fields=['user']),
+            models.Index(fields=['score']),
+        ]
 
     def __str__(self):
         return f'{self.user} - {self.product} - {self.score}'
@@ -93,6 +102,11 @@ class Comment(models.Model):
         verbose_name = 'Комментарии'
         verbose_name_plural = 'Комментарии'
         unique_together = ('product', 'user')
+        indexes = [
+            models.Index(fields=['product']),
+            models.Index(fields=['user']),
+            models.Index(fields=['created']),
+        ]
 
     def __str__(self):
         return f'{self.user} - {self.product} - {self.text[:20]}'

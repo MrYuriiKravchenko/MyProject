@@ -1,4 +1,5 @@
 {% extends "shop/base.html" %}
+{% load cache %}
 {% load static %}
 
 {% block title %}
@@ -13,11 +14,13 @@
                 <li {% if not category %}class="selected"{% endif %}>
                     <a href="{% url 'shop:product_list' %}">Все</a>
                 </li>
+                {% cache 120 categories %}
                 {% for c in categories %}
                     <li {% if category and category.slug == c.slug %}class="selected"{% endif %}>
                         <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
                     </li>
                 {% endfor %}
+                {% endcache %}
             </ul>
 
             <div class="filter-form">

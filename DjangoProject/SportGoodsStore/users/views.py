@@ -17,6 +17,15 @@ class SignupPageView(generic.CreateView):
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Вы успешно зарегистрировались! Теперь вы можете войти.")
+        return response
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Ошибка регистрации. Пожалуйста, исправьте ошибки в форме.")
+        return super().form_invalid(form)
+
 
 class ProfileView(LoginRequiredMixin, UpdateView):
     form_class = CustomUserChangeForm

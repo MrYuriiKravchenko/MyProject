@@ -48,12 +48,15 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
     'coupons.apps.CouponsConfig',
+    'captcha',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -61,6 +64,9 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 ROOT_URLCONF = 'SportGoodsStore.urls'
 
@@ -96,6 +102,13 @@ DATABASES = {
         "PASSWORD": str(os.getenv("SQL_PASSWORD")),
         "HOST": str(os.getenv("SQL_HOST")),
         "PORT": str(os.getenv("SQL_PORT")),
+    }
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": BASE_DIR / "cache",
     }
 }
 
@@ -192,3 +205,13 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = os.getenv('CELERY_TASK_SERIALIZER')
 CELERY_RESULT_SERIALIZER = os.getenv('CELERY_RESULT_SERIALIZER')
 CELERY_TIMEZONE = os.getenv('CELERY_TIMEZONE')
+
+CAPTCHA_IMAGE_SIZE = (150, 50)
+CAPTCHA_FONT_SIZE = 32
+CAPTCHA_LETTER_ROTATION = None
+CAPTCHA_TIMEOUT = 5
+
+ACCOUNT_FORMS = {
+    'signup': 'users.forms.CustomUserCreationForm',
+}
+

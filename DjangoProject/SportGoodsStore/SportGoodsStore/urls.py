@@ -26,6 +26,8 @@ urlpatterns = [
     path('orders/', include('orders.urls', namespace='orders')),
     path('coupons/', include('coupons.urls', namespace='coupon')),
     path('', include('shop.urls', namespace='shop')),
+    path('captcha/', include('captcha.urls')),
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -15,6 +15,9 @@ class Coupon(models.Model):
     class Meta:
         verbose_name = 'Купоны'
         verbose_name_plural = 'Купоны'
+        indexes = [
+            models.Index(fields=['valid_from', 'valid_to']),
+        ]
 
     def __str__(self):
         return self.code

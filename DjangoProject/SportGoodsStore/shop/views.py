@@ -187,7 +187,7 @@ class RemoveFromWishlistView(View):
         product = get_object_or_404(Product, id=product_id)
         user = request.user
 
-        wishlist_item = Wishlist.objects.filter(user=user, product=product)
+        wishlist_item = Wishlist.objects.filter(user=user, product=product).select_related('product')
         if wishlist_item.exists():
             wishlist_item.delete()
             return JsonResponse({'status': 'removed'})

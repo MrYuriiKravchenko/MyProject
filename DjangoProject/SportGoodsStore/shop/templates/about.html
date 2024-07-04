@@ -1,5 +1,6 @@
 {% extends "shop/base.html" %}
 {% load static %}
+{% load cache %}
 
 {% block title %}
     О нас
@@ -13,9 +14,13 @@
 {% block content %}
 <div class="container">
     <h1>О нас</h1>
+    {% cache 100 unique_description_key %}
     <p>{{ description }}</p>
+    {% endcache %}
     <h2>Наша миссия</h2>
+    {% cache 120 unique_mission_key %}
     <p>{{ mission }}</p>
+    {% endcache %}
 
     <h2>Контакты</h2>
     <p><strong>Python разработчик</strong></p>
