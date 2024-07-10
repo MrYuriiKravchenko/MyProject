@@ -1,0 +1,127 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+    <script src="{% static 'js/stars.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ratingForm = document.getElementById('rating-form');
+            const userIsAuthenticated = {{ user.is_authenticated|lower }};
+
+            if (ratingForm && !userIsAuthenticated) {
+                ratingForm.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    window.location.href = '{% url "account_login" %}?next={{ request.path }}';
+                });
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block title %}
+    {{ product.name }}
+{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+    <div class="left-block stretched">
+        <div class="product-image">
+            <img src="{% if product.image %}{{ product.image.url }}{% else %}
+                {% static 'img/no_image.png' %}{% endif %}">
+        </div>
+        <!-- Комментарии и рейтинг -->
+        <div class="rating">
+            <h3>Рейтинг: {{ average_rating|default:"нет оценок" }}</h3>
+            <form method="post" action="." id="rating-form">
+                {% csrf_token %}
+                <div class="star-rating">
+                    {% for i in 5|to_0 %}
+                        <input type="radio" id="star{{ i }}" name="score" value="{{ i }}" {% if i == rating_value %}checked{% endif %}/>
+                        <label for="star{{ i }}" title="{{ i }} звезд"></label>
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="rating" value="true">
+                <input type="submit" value="Оценить" class="rating-submit">
+            </form>
+        </div>
+        <!-- Отзывы -->
+        <div class="comments">
+            <h3>Отзывы:</h3>
+            {% for comment in comments %}
+                <div class="comment">
+                    <strong>{{ comment.user.username }}</strong>
+                    <p>{{ comment.text }}</p>
+                    <small>{{ comment.created }}</small>
+                </div>
+            {% endfor %}
+            <h4>Добавить отзыв:</h4>
+            {% if user.is_authenticated %}
+                {% if user_commented %}
+                    <p>Вы можете оставить только один отзыв на продукт.</p>
+                {% else %}
+                    <form method="post" action="." id="comment-form">
+                        {% csrf_token %}
+                        {{ comment_form }}
+                        <input type="hidden" name="comment" value="true">
+                        <input type="submit" value="Комментировать" class="large-button">
+                    </form>
+                {% endif %}
+            {% else %}
+                <p>Пожалуйста, <a href="{% url 'account_login' %}" class="login-link">войдите</a>, чтобы оставить комментарий или оценку.</p>
+            {% endif %}
+
+        </div>
+    </div>
+    <div class="right-block">
+        <div class="product-info">
+            <h1>{{ product.name }}</h1>
+            <div class="category-info">
+                <h2>
+                    <a href="{{ product.category.get_absolute_url }}">
+                        {{ product.category }}
+                    </a>
+                </h2>
+            </div>
+            <div class="share-buttons">
+                <h3>Поделиться:</h3>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="share-button facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://t.me/share/url?url={{ request.build_absolute_uri }}&text={{ post.title }}" target="_blank" class="share-button telegram">
+                    <i class="fab fa-telegram-plane"></i>
+                </a>
+                <a href="https://vk.com/share.php?url={{ request.build_absolute_uri }}" target="_blank" class="share-button vk">
+                    <i class="fab fa-vk"></i>
+                </a>
+            </div>
+            <p class="price">₽ {{ product.price }}</p>
+            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                {% csrf_token %}
+                <div class="quantity-control">
+                    {{ cart_product_form.quantity }}
+                </div>
+                <input type="submit" value="Добавить в корзину">
+            </form>
+            <p>{{ product.description|linebreaks }}</p>
+        </div>
+        {% if recommended_products %}
+            <div class="recommendations">
+                <h3>Люди, купившие это товар, также купили</h3>
+                {% for p in recommended_products %}
+                    <div class="item">
+                        <a href="{{ p.get_absolute_url }}">
+                            <img src="{% if p.image %}{{ p.image.url }}{% else %}
+                              {% static 'img/no_image.png' %}{% endif %}">
+                        </a>
+                        <p><a href="{{ p.get_absolute_url }}">{{ p.name }}</a></p>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+name: myapp
+
+services:
+  web:
+    build: ./app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - static-data:/home/app/web/static
+    env_file:
+      - .env
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
+
+  celery:
+    build: ./app
+    command: celery -A SportGoodsStore worker --loglevel=info
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+      - redis
+
+
+  rabbitmq:
+    image: rabbitmq:management
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD}
+      - POSTGRES_DB=${SQL_DATABASE}
+
+  redis:
+    image: redis:7
+    volumes:
+      - redis-data:/data
+
+
+volumes:
+  postgres-data:
+  static-data:
+  redis-data:
+  rabbitmq-data:

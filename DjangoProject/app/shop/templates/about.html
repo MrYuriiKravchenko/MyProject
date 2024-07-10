@@ -1,0 +1,37 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% load cache %}
+
+{% block title %}
+    О нас
+{% endblock title %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+{% endblock head %}
+
+{% block content %}
+<div class="container">
+    <h1>О нас</h1>
+    {% cache 600 unique_description_key %}
+    <p>{{ description }}</p>
+    {% endcache %}
+    <h2>Наша миссия</h2>
+    {% cache 600 unique_mission_key %}
+    <p>{{ mission }}</p>
+    {% endcache %}
+
+    <h2>Контакты</h2>
+    <p><strong>Python разработчик</strong></p>
+    <p>Кравченко Юрий Александрович</p>
+    <ul>
+        <li>
+            <a class="button" href="https://t.me/yuriikrav" target="_blank">Связаться в Telegram</a> <- предпочитаемый вид связи
+        </li>
+        <li>Email: <a class="email-link" href="mailto:misterkrava@yandex.ru">misterkrava@yandex.ru</a></li>
+        <li>Телефон: <a class="phone-link" href="tel:+79595331347">+7 959 533 13 47</a></li>
+        <li>GitHub: <a class="github-link" href="https://github.com/MrYuriiKravchenko" target="_blank"><i class="fab fa-github github-icon"></i></a></li>
+    </ul>
+</div>
+{% endblock content %}
